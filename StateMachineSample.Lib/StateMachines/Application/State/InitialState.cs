@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Application.Trigger;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class InitialState : State
+    public sealed class InitialState : Common.State
     {
-        public static InitialState Instance { get; private set; } = new InitialState();
-
         private InitialState() : base("Initial")
         {
-            this.OnEntry += this.EntryEventHandler;
+            OnEntry = EntryEventHandler;
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
+        public static InitialState Instance { get; } = new InitialState();
+
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap
         {
-            return new TriggerActionMap()
-            {
-                { InitializedTrigger.Instance.Name, this.InitializedTriggerHandler },
-            };
-        }
+            {InitializedTrigger.Instance.Name, InitializedTriggerHandler}
+        };
 
-        private void EntryEventHandler(StateMachine context)
+        private void EntryEventHandler(Common.StateMachine context)
         {
             var stm = context.GetAs<ModelStateMachine>();
 
@@ -40,6 +35,5 @@ namespace StateMachineSample.Lib
 
             context.ChangeState(StopState.Instance);
         }
-
     }
 }

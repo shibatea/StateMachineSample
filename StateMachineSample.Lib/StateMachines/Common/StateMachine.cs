@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StateMachineSample.Lib.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Common
 {
     public abstract class StateMachine : NotificationObject
     {
-        private State _CurrentState { get; set; }
+        private State _currentState { get; set; }
 
         public State CurrentState
         {
-            get { return this._CurrentState; }
+            get => _currentState;
             set
             {
-                if (this._CurrentState != value)
-                {
-                    this._CurrentState = value;
-                    this.RaisePropertyChanged(nameof(this.CurrentState));
-                }
+                if (_currentState == value) return;
+
+                _currentState = value;
+                RaisePropertyChanged(nameof(CurrentState));
             }
         }
 
@@ -28,61 +23,49 @@ namespace StateMachineSample.Lib
 
         protected abstract State GetInitialState();
 
-        public StateMachine()
-        {
-        }
-
         public void SendTrigger(Trigger trigger)
         {
             Messenger.Send($"Send Trigger : {trigger.Name}");
 
-            this.CurrentState?.SendTrigger(this, trigger);
+            CurrentState?.SendTrigger(this, trigger);
         }
 
-        public void ChangeState(State new_state, Effect effect = null)
+        public void ChangeState(State newState, Effect effect = null)
         {
-            if (this.CurrentState != new_state)
+            if (CurrentState != newState)
             {
-                var old_state = this.CurrentState;
+                var oldState = CurrentState;
 
-                this.CurrentState?.ExecuteExitAction(this);
+                CurrentState?.ExecuteExitAction(this);
 
-                this.CurrentState = new_state;
-                this.PreviousState = old_state;
+                CurrentState = newState;
+                PreviousState = oldState;
 
-                if (old_state != null)
-                {
-                    Messenger.Send($"State Changed : {old_state} => {new_state}");
-                }
+                if (oldState != null) Messenger.Send($"State Changed : {oldState} => {newState}");
 
                 effect?.Execute(this);
 
-                this.CurrentState?.ExecuteEntryAction(this);
+                CurrentState?.ExecuteEntryAction(this);
             }
         }
 
         public void Update()
         {
-            this.CurrentState?.ExecuteDoAction(this);
+            CurrentState?.ExecuteDoAction(this);
         }
 
         public T GetAs<T>() where T : StateMachine
         {
             if (this is T stm)
-            {
                 return stm;
-            }
-            else
-            {
-                throw new InvalidOperationException($"State Machine is not {nameof(T)}");
-            }
+            throw new InvalidOperationException($"State Machine is not {nameof(T)}");
         }
 
         protected void ChangeToInitialState()
         {
-            var initial_state = this.GetInitialState();
+            var initialState = GetInitialState();
 
-            this.ChangeState(initial_state);
+            ChangeState(initialState);
         }
     }
 }

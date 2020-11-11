@@ -1,43 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.Effect;
+using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Application.Trigger;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class CleanState : State
+    public sealed class CleanState : Common.State
     {
-        public static CleanState Instance { get; private set; } = new CleanState();
+        private CleanState() : base("Clean")
+        {
+            OnEntry = EntryEventHandler;
+            OnDo = DoEventHandler;
+        }
+
+        public static CleanState Instance { get; } = new CleanState();
 
         public CleanStateMachine SubContext { get; private set; }
 
-        private CleanState() : base("Clean")
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap
         {
-            this.OnEntry += this.EntryEventHandler;
-            this.OnDo += this.DoEventHandler;
-        }
+            {SwitchStopTrigger.Instance.Name, SwitchStopTriggerHandler}
+        };
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
-        {
-            return new TriggerActionMap()
-            {
-                { SwitchStopTrigger.Instance.Name, this.SwitchStopTriggerHandler },
-            };
-        }
 
-        private void EntryEventHandler(StateMachine context)
+        private void EntryEventHandler(Common.StateMachine context)
         {
             var parent = context.GetAs<ModelStateMachine>();
 
-            this.SubContext = new CleanStateMachine(parent);
+            SubContext = new CleanStateMachine(parent);
         }
 
-        private void DoEventHandler(StateMachine context)
+        private void DoEventHandler(Common.StateMachine context)
         {
-            this.SubContext.Update();
+            SubContext.Update();
 
-            if (this.SubContext.CurrentState is CleanFinalState)
+            if (SubContext.CurrentState is CleanFinalState)
             {
                 var effect = CleanEndEffect.Instance;
 

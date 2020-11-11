@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class LightCleanState : State
+    public sealed class LightCleanState : Common.State
     {
-        public static LightCleanState Instance { get; private set; } = new LightCleanState();
-
         private LightCleanState() : base("Light Clean")
         {
-            this.OnDo += this.DoEventHandler;
+            OnDo = DoEventHandler;
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
-        {
-            return new TriggerActionMap()
-            {
-            };
-        }
+        public static LightCleanState Instance { get; } = new LightCleanState();
 
-        private void DoEventHandler(StateMachine context)
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap();
+
+        private void DoEventHandler(Common.StateMachine context)
         {
             var stm = context.GetAs<CleanStateMachine>();
 
@@ -30,10 +22,7 @@ namespace StateMachineSample.Lib
 
             var result = model.LightCleanControl();
 
-            if (result == true)
-            {
-                stm.ChangeState(CleanFinalState.Instance);
-            }
+            if (result) stm.ChangeState(CleanFinalState.Instance);
         }
     }
 }

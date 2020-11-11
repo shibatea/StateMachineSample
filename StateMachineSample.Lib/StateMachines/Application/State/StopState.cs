@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.Trigger;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class StopState : State
+    public sealed class StopState : Common.State
     {
-        public static StopState Instance { get; private set; } = new StopState();
-
         private StopState() : base("Stop")
         {
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
+        public static StopState Instance { get; } = new StopState();
+
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap
         {
-            return new TriggerActionMap()
-            {
-                { SwitchStartTrigger.Instance.Name, this.SwitchStartTriggerHandler },
-            };
-        }
+            {SwitchStartTrigger.Instance.Name, SwitchStartTriggerHandler}
+        };
+
 
         private void SwitchStartTriggerHandler(TriggerActionArgs args)
         {

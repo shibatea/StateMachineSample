@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.Model;
+using StateMachineSample.Lib.StateMachines.Application.State;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.StateMachine
 {
-    public class ModelStateMachine : StateMachine
+    public class ModelStateMachine : Common.StateMachine
     {
-        public AirConditioner Model { get; }
-
         public ModelStateMachine(AirConditioner model)
         {
-            this.Model = model;
+            Model = model;
 
-            this.ChangeToInitialState();
+            ChangeToInitialState();
         }
 
-        protected override State GetInitialState()
+        public AirConditioner Model { get; }
+
+        protected override Common.State GetInitialState()
         {
             return InitialState.Instance;
         }

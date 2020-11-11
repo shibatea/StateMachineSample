@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.Model
 {
     public class AirConditioner : NotificationObject
     {
@@ -21,13 +16,13 @@ namespace StateMachineSample.Lib
 
         public int Temperature
         {
-            get { return this._Temperature; }
+            get => _Temperature;
             set
-            { 
-                if (this._Temperature != value)
+            {
+                if (_Temperature != value)
                 {
-                    this._Temperature = value;
-                    this.RaisePropertyChanged(nameof(this.Temperature));
+                    _Temperature = value;
+                    RaisePropertyChanged(nameof(Temperature));
                 }
             }
         }
@@ -36,13 +31,13 @@ namespace StateMachineSample.Lib
 
         public int TargetTemperature
         {
-            get { return this._TargetTemperature; }
+            get => _TargetTemperature;
             set
             {
-                if (this._TargetTemperature != value)
+                if (_TargetTemperature != value)
                 {
-                    this._TargetTemperature = value;
-                    this.RaisePropertyChanged(nameof(this.TargetTemperature));
+                    _TargetTemperature = value;
+                    RaisePropertyChanged(nameof(TargetTemperature));
                 }
             }
         }
@@ -51,13 +46,13 @@ namespace StateMachineSample.Lib
 
         public int Humidity
         {
-            get { return this._Humidity; }
+            get => _Humidity;
             set
             {
-                if (this._Humidity != value)
+                if (_Humidity != value)
                 {
-                    this._Humidity = value;
-                    this.RaisePropertyChanged(nameof(this.Humidity));
+                    _Humidity = value;
+                    RaisePropertyChanged(nameof(Humidity));
                 }
             }
         }
@@ -70,139 +65,117 @@ namespace StateMachineSample.Lib
 
         private StainLevel PrevStainLevel { get; set; }
 
-        private bool AnalyseFinished => (this.StainLevel != StainLevel.Unknown);
+        private bool AnalyseFinished => StainLevel != StainLevel.Unknown;
 
-        private bool CleanFinished => ((this.StainLevel == StainLevel.High && this.CleanCount >= 20) 
-                                    || (this.StainLevel == StainLevel.Low && this.CleanCount >= 10));
+        private bool CleanFinished => StainLevel == StainLevel.High && CleanCount >= 20
+                                      || StainLevel == StainLevel.Low && CleanCount >= 10;
 
         public void Initialize()
         {
-            this.Temperature = 30;
+            Temperature = 30;
 
-            this.TargetTemperature = AirConditioner.MinTargetTemperature;
+            TargetTemperature = MinTargetTemperature;
 
-            this.Humidity = 50;
+            Humidity = 50;
 
-            this.StainLevel = StainLevel.Unknown;
+            StainLevel = StainLevel.Unknown;
 
-            this.PrevStainLevel = StainLevel.Unknown;
+            PrevStainLevel = StainLevel.Unknown;
 
-            this.AnalyseCount = 0;
+            AnalyseCount = 0;
 
-            this.CleanCount = 0;
+            CleanCount = 0;
         }
 
         public void Start()
         {
-            this.Temperature = 30;
+            Temperature = 30;
 
-            this.Humidity = 50;
+            Humidity = 50;
         }
 
         public void Stop()
         {
-            this.StainLevel = StainLevel.Unknown;
+            StainLevel = StainLevel.Unknown;
 
-            this.PrevStainLevel = StainLevel.Unknown;
+            PrevStainLevel = StainLevel.Unknown;
 
-            this.AnalyseCount = 0;
+            AnalyseCount = 0;
 
-            this.CleanCount = 0;
+            CleanCount = 0;
         }
 
         public void Up()
         {
-            if (this.TargetTemperature < AirConditioner.MaxTargetTemperature)
-            {
-                this.TargetTemperature++;
-            }
+            if (TargetTemperature < MaxTargetTemperature) TargetTemperature++;
         }
 
         public void Down()
         {
-            if (this.TargetTemperature > AirConditioner.MinTargetTemperature)
-            {
-                this.TargetTemperature--;
-            }
+            if (TargetTemperature > MinTargetTemperature) TargetTemperature--;
         }
 
         public void CoolControl()
         {
-            if (this.TargetTemperature < this.Temperature)
-            {
-                this.Temperature--;
-            }
+            if (TargetTemperature < Temperature) Temperature--;
         }
 
         public void HeatControl()
         {
-            if (this.TargetTemperature > this.Temperature)
-            {
-                this.Temperature++;
-            }
+            if (TargetTemperature > Temperature) Temperature++;
         }
 
         public void DryControl()
         {
-            if (this.Humidity > AirConditioner.MinHumidity)
-            {
-                this.Humidity--;
-            }
+            if (Humidity > MinHumidity) Humidity--;
         }
 
         public StainLevel StainLevelAnalys()
         {
-            this.AnalyseCount++;
+            AnalyseCount++;
 
-            if (this.AnalyseCount >= 5)
-            {
-                switch (this.PrevStainLevel)
+            if (AnalyseCount >= 5)
+                switch (PrevStainLevel)
                 {
                     case StainLevel.Unknown:
-                        this.StainLevel = StainLevel.Low;
+                        StainLevel = StainLevel.Low;
                         break;
                     case StainLevel.Low:
-                        this.StainLevel = StainLevel.High;
+                        StainLevel = StainLevel.High;
                         break;
                     case StainLevel.High:
-                        this.StainLevel = StainLevel.Low;
-                        break;
-                    default:
+                        StainLevel = StainLevel.Low;
                         break;
                 }
-            }
             else
-            {
-                this.StainLevel = StainLevel.Unknown;
-            }
+                StainLevel = StainLevel.Unknown;
 
-            return this.StainLevel;
+            return StainLevel;
         }
 
         public bool DeepCleanControl()
         {
-            this.CleanCount++;
+            CleanCount++;
 
-            return this.CleanFinished;
+            return CleanFinished;
         }
 
         public bool LightCleanControl()
         {
-            this.CleanCount++;
+            CleanCount++;
 
-            return this.CleanFinished;
+            return CleanFinished;
         }
 
         public void CleanEnd()
         {
-            this.PrevStainLevel = this.StainLevel;
+            PrevStainLevel = StainLevel;
 
-            this.StainLevel = StainLevel.Unknown;
+            StainLevel = StainLevel.Unknown;
 
-            this.AnalyseCount = 0;
+            AnalyseCount = 0;
 
-            this.CleanCount = 0;
+            CleanCount = 0;
         }
-
     }
 }

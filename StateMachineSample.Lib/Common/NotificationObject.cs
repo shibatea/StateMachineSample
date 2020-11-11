@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.Common
 {
     public class NotificationObject : INotifyPropertyChanged
     {
@@ -13,7 +8,7 @@ namespace StateMachineSample.Lib
 
         protected void RaisePropertyChanged(string name)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

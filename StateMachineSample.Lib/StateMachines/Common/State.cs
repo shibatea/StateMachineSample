@@ -1,60 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StateMachineSample.Lib.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Common
 {
-    public delegate void StateEventHandler(StateMachine conetxt);
-
     public abstract class State
     {
+        protected Action<StateMachine> OnDo;
+        protected Action<StateMachine> OnEntry;
+        protected Action<StateMachine> OnExit;
+
+        protected State(string name)
+        {
+            Name = name;
+        }
+
         public string Name { get; }
 
-        protected StateEventHandler OnEntry;
-        protected StateEventHandler OnDo;
-        protected StateEventHandler OnExit;
-
-        private TriggerActionMap TriggerActionMap { get; set; }
-
-        protected abstract TriggerActionMap GenerateTriggerActionMap();
-
-        public State(string name)
-        {
-            this.Name = name;
-
-            this.TriggerActionMap = this.GenerateTriggerActionMap();
-        }
+        protected abstract TriggerActionMap TriggerActionMap { get; }
 
         public void ExecuteEntryAction(StateMachine context)
         {
-            Messenger.Send($"Entry : {this.Name}");
+            Messenger.Send($"Entry : {Name}");
 
-            this.OnEntry?.Invoke(context);
+            OnEntry?.Invoke(context);
         }
 
         public void ExecuteDoAction(StateMachine context)
         {
-            Messenger.Send($"Do : {this.Name}");
+            Messenger.Send($"Do : {Name}");
 
-            this.OnDo?.Invoke(context);
+            OnDo?.Invoke(context);
         }
 
         public void ExecuteExitAction(StateMachine context)
         {
-            Messenger.Send($"Exit : {this.Name}");
+            Messenger.Send($"Exit : {Name}");
 
-            this.OnExit?.Invoke(context);
+            OnExit?.Invoke(context);
         }
 
         public void SendTrigger(StateMachine context, Trigger trigger)
         {
-            if (this.TriggerActionMap.ContainsKey(trigger.Name) == true)
+            if (TriggerActionMap.ContainsKey(trigger.Name))
             {
                 Messenger.Send($"Trigger : {trigger.Name}");
 
-                var action = this.TriggerActionMap[trigger.Name];
+                var action = TriggerActionMap[trigger.Name];
 
                 var args = new TriggerActionArgs(context, trigger);
 
@@ -64,7 +55,7 @@ namespace StateMachineSample.Lib
 
         public override string ToString()
         {
-            return $"{this.Name}";
+            return $"{Name}";
         }
     }
 }

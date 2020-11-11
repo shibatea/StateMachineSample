@@ -1,48 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Application.Trigger;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class RunningState : State
+    public sealed class RunningState : Common.State
     {
-        public static RunningState Instance { get; private set; } = new RunningState();
+        private RunningState() : base("Running")
+        {
+            OnEntry = EntryEventHandler;
+            OnDo = DoEventHandler;
+        }
+
+        public static RunningState Instance { get; } = new RunningState();
 
         public RunningStateMachine SubContext { get; private set; }
 
-        private RunningState() : base("Running")
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap
         {
-            this.OnEntry += this.EntryEventHandler;
-            this.OnDo += this.DoEventHandler;
-        }
+            {SwitchStopTrigger.Instance.Name, SwitchStopTriggerHandler},
+            {SwitchCleanTrigger.Instance.Name, SwitchCleanTriggerHandler},
+            {SwitchCoolTrigger.Instance.Name, SubContextTriggerHandler},
+            {SwitchHeatTrigger.Instance.Name, SubContextTriggerHandler},
+            {SwitchDryTrigger.Instance.Name, SubContextTriggerHandler}
+        };
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
+        private void EntryEventHandler(Common.StateMachine context)
         {
-            return new TriggerActionMap()
-            {
-                { SwitchStopTrigger.Instance.Name, this.SwitchStopTriggerHandler },
-                { SwitchCleanTrigger.Instance.Name, this.SwitchCleanTriggerHandler },
-                { SwitchCoolTrigger.Instance.Name, this.SubContextTriggerHandler },
-                { SwitchHeatTrigger.Instance.Name, this.SubContextTriggerHandler },
-                { SwitchDryTrigger.Instance.Name, this.SubContextTriggerHandler },
-            };
-        }
-
-        private void EntryEventHandler(StateMachine context)
-        {
-            if (this.SubContext == null)
+            if (SubContext == null)
             {
                 var parent = context.GetAs<ModelStateMachine>();
 
-                this.SubContext = new RunningStateMachine(parent);
+                SubContext = new RunningStateMachine(parent);
             }
         }
 
-        private void DoEventHandler(StateMachine context)
+        private void DoEventHandler(Common.StateMachine context)
         {
-            this.SubContext.Update();
+            SubContext.Update();
         }
 
         private void SwitchStopTriggerHandler(TriggerActionArgs args)
@@ -65,7 +60,7 @@ namespace StateMachineSample.Lib
         {
             var trigger = args.Trigger;
 
-            var context = this.SubContext;
+            var context = SubContext;
 
             context.SendTrigger(trigger);
         }

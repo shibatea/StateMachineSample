@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StateMachineSample.Lib
+﻿namespace StateMachineSample.Lib.StateMachines.Application.Trigger
 {
-    public sealed class SwitchCoolTrigger : Trigger
+    public sealed class SwitchCoolTrigger : Common.Trigger
     {
-        public static SwitchCoolTrigger Instance { get; private set; } = new SwitchCoolTrigger();
-
         public SwitchCoolTrigger() : base("Switch Cool Trigger")
         {
         }
+
+        public static SwitchCoolTrigger Instance { get; } = new SwitchCoolTrigger();
     }
 }

@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class DeepCleanState : State
+    public sealed class DeepCleanState : Common.State
     {
-        public static DeepCleanState Instance { get; private set; } = new DeepCleanState();
-
         private DeepCleanState() : base("Deep Clean")
         {
-            this.OnDo += this.DoEventHandler;
+            OnDo = DoEventHandler;
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
-        {
-            return new TriggerActionMap()
-            {
-            };
-        }
+        public static DeepCleanState Instance { get; } = new DeepCleanState();
 
-        private void DoEventHandler(StateMachine context)
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap();
+
+        private void DoEventHandler(Common.StateMachine context)
         {
             var stm = context.GetAs<CleanStateMachine>();
 
@@ -30,10 +22,7 @@ namespace StateMachineSample.Lib
 
             var result = model.DeepCleanControl();
 
-            if (result == true)
-            {
-                stm.ChangeState(CleanFinalState.Instance);
-            }
+            if (result) stm.ChangeState(CleanFinalState.Instance);
         }
     }
 }

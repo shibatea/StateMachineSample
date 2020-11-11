@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StateMachineSample.Lib
+﻿namespace StateMachineSample.Lib.StateMachines.Application.Trigger
 {
-    public sealed class SwitchDryTrigger : Trigger
+    public sealed class SwitchDryTrigger : Common.Trigger
     {
-        public static SwitchDryTrigger Instance { get; private set; } = new SwitchDryTrigger();
-
         public SwitchDryTrigger() : base("Switch Dry Trigger")
         {
         }
+
+        public static SwitchDryTrigger Instance { get; } = new SwitchDryTrigger();
     }
 }

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StateMachineSample.Lib
+﻿namespace StateMachineSample.Lib.Model
 {
     public enum StainLevel
     {
         Unknown,
         Low,
-        High,
+        High
     }
 }

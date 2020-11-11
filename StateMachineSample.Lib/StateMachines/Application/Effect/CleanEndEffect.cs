@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.Effect
 {
-    public sealed class CleanEndEffect : Effect
+    public sealed class CleanEndEffect : Common.Effect
     {
-        public static CleanEndEffect Instance { get; private set; } = new CleanEndEffect();
-
         public CleanEndEffect() : base("Clean End Effect")
         {
         }
 
-        protected override void ExecuteAction(StateMachine context)
+        public static CleanEndEffect Instance { get; } = new CleanEndEffect();
+
+        protected override void ExecuteAction(Common.StateMachine context)
         {
             var stm = context.GetAs<ModelStateMachine>();
 

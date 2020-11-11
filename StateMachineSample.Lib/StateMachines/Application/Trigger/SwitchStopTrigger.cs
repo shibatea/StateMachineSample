@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.Effect;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.Trigger
 {
-    public sealed class SwitchStopTrigger : Trigger
+    public sealed class SwitchStopTrigger : Common.Trigger
     {
-        public static SwitchStopTrigger Instance { get; private set; } = new SwitchStopTrigger();
-
         public SwitchStopTrigger() : base("Switch Stop Trigger", SwitchStopEffect.Instance)
         {
         }
+
+        public static SwitchStopTrigger Instance { get; } = new SwitchStopTrigger();
     }
 }

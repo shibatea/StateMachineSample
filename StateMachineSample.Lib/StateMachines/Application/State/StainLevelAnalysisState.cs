@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.Model;
+using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class StainLevelAnalysisState : State
+    public sealed class StainLevelAnalysisState : Common.State
     {
-        public static StainLevelAnalysisState Instance { get; private set; } = new StainLevelAnalysisState();
-
         private StainLevelAnalysisState() : base("Stain Level AnalysisState")
         {
-            this.OnDo += this.DoEventHandler;
+            OnDo = DoEventHandler;
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
-        {
-            return new TriggerActionMap()
-            {
-            };
-        }
+        public static StainLevelAnalysisState Instance { get; } = new StainLevelAnalysisState();
 
-        private void DoEventHandler(StateMachine context)
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap();
+
+        private void DoEventHandler(Common.StateMachine context)
         {
             var stm = context.GetAs<CleanStateMachine>();
 
@@ -40,9 +33,6 @@ namespace StateMachineSample.Lib
                     break;
                 case StainLevel.High:
                     stm.ChangeState(DeepCleanState.Instance);
-                    break;
-                default:
-                    /* Nothing to do */
                     break;
             }
         }

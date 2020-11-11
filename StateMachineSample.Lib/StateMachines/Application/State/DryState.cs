@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Application.Trigger;
+using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class DryState : State
+    public sealed class DryState : Common.State
     {
-        public static DryState Instance { get; private set; } = new DryState();
-
         private DryState() : base("Dry")
         {
-            this.OnDo += this.DoEventHandler;
+            OnDo = DoEventHandler;
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
+        public static DryState Instance { get; } = new DryState();
+
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap
         {
-            return new TriggerActionMap()
-            {
-                { SwitchCoolTrigger.Instance.Name, this.SwitchCoolTriggerHandler },
-                { SwitchHeatTrigger.Instance.Name, this.SwitchHeatTriggerHandler },
-            };
-        }
+            {SwitchCoolTrigger.Instance.Name, SwitchCoolTriggerHandler},
+            {SwitchHeatTrigger.Instance.Name, SwitchHeatTriggerHandler}
+        };
 
-        private void DoEventHandler(StateMachine context)
+        private void DoEventHandler(Common.StateMachine context)
         {
             var stm = context.GetAs<RunningStateMachine>();
 

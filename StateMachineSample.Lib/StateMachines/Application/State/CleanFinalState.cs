@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.State
 {
-    public sealed class CleanFinalState : State
+    public sealed class CleanFinalState : Common.State
     {
-        public static CleanFinalState Instance { get; private set; } = new CleanFinalState();
-
         private CleanFinalState() : base("Clean Final")
         {
         }
 
-        protected override TriggerActionMap GenerateTriggerActionMap()
-        {
-            return new TriggerActionMap()
-            {
-            };
-        }
+        public static CleanFinalState Instance { get; } = new CleanFinalState();
+
+        protected override TriggerActionMap TriggerActionMap => new TriggerActionMap();
     }
 }

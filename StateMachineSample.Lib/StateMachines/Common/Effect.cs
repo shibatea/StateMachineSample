@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.Common;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Common
 {
     public abstract class Effect
     {
-        string Name { get; }
+        protected Effect(string name)
+        {
+            Name = name;
+        }
+
+        private string Name { get; }
 
         protected abstract void ExecuteAction(StateMachine context);
 
-        public Effect(string name)
-        {
-            this.Name = name;
-        }
-
         public void Execute(StateMachine context)
         {
-            Messenger.Send($"Execute : {this.Name}");
+            Messenger.Send($"Execute : {Name}");
 
-            this.ExecuteAction(context);
+            ExecuteAction(context);
         }
 
         public override string ToString()
         {
-            return $"{this.Name}";
+            return $"{Name}";
         }
     }
 }

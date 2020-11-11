@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StateMachineSample.Lib.StateMachines.Application.StateMachine;
 
-namespace StateMachineSample.Lib
+namespace StateMachineSample.Lib.StateMachines.Application.Effect
 {
-    public sealed class SwitchStopEffect : Effect
+    public sealed class SwitchStopEffect : Common.Effect
     {
-        public static SwitchStopEffect Instance { get; private set; } = new SwitchStopEffect();
-
         public SwitchStopEffect() : base("Switch Stop Effect")
         {
         }
 
-        protected override void ExecuteAction(StateMachine context)
+        public static SwitchStopEffect Instance { get; } = new SwitchStopEffect();
+
+        protected override void ExecuteAction(Common.StateMachine context)
         {
             var stm = context.GetAs<ModelStateMachine>();
 
