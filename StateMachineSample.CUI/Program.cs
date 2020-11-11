@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 using StateMachineSample.Lib;
+using StateMachineSample.Lib.Common;
+using StateMachineSample.Lib.Model;
+using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Application.Trigger;
 
 namespace StateMachineSample.CUI
 {

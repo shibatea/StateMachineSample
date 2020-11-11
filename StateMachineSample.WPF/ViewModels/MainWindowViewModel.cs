@@ -17,8 +17,12 @@ using StateMachineSample.Lib;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
-
-using StmMessenger = StateMachineSample.Lib.Messenger;
+using StateMachineSample.Lib.Model;
+using StateMachineSample.Lib.StateMachines.Application.State;
+using StateMachineSample.Lib.StateMachines.Application.StateMachine;
+using StateMachineSample.Lib.StateMachines.Application.Trigger;
+using StateMachineSample.Lib.StateMachines.Common;
+using StmMessenger = StateMachineSample.Lib.Common.Messenger;
 
 namespace StateMachineSample.WPF.ViewModels
 {
