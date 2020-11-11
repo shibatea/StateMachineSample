@@ -12,7 +12,9 @@ namespace StateMachineSample.Lib.Model
 
         public const int MinHumidity = 20;
 
+#pragma warning disable IDE1006 // 命名スタイル
         private int _Temperature { get; set; }
+#pragma warning restore IDE1006 // 命名スタイル
 
         public int Temperature
         {
@@ -27,7 +29,9 @@ namespace StateMachineSample.Lib.Model
             }
         }
 
+#pragma warning disable IDE1006 // 命名スタイル
         private int _TargetTemperature { get; set; }
+#pragma warning restore IDE1006 // 命名スタイル
 
         public int TargetTemperature
         {
@@ -42,7 +46,9 @@ namespace StateMachineSample.Lib.Model
             }
         }
 
+#pragma warning disable IDE1006 // 命名スタイル
         private int _Humidity { get; set; }
+#pragma warning restore IDE1006 // 命名スタイル
 
         public int Humidity
         {

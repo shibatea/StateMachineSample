@@ -5,16 +5,18 @@ namespace StateMachineSample.Lib.StateMachines.Common
 {
     public abstract class StateMachine : NotificationObject
     {
-        private State _currentState { get; set; }
+#pragma warning disable IDE1006 // 命名スタイル
+        private State _CurrentState { get; set; }
+#pragma warning restore IDE1006 // 命名スタイル
 
         public State CurrentState
         {
-            get => _currentState;
+            get => _CurrentState;
             set
             {
-                if (_currentState == value) return;
+                if (_CurrentState == value) return;
 
-                _currentState = value;
+                _CurrentState = value;
                 RaisePropertyChanged(nameof(CurrentState));
             }
         }
