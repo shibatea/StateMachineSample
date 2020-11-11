@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using StateMachineSample.Lib;
 using StateMachineSample.Lib.Common;
 using StateMachineSample.Lib.Model;
 using StateMachineSample.Lib.StateMachines.Application.StateMachine;
@@ -12,14 +6,11 @@ using StateMachineSample.Lib.StateMachines.Application.Trigger;
 
 namespace StateMachineSample.CUI
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Messenger.OnMessageReceived += (message) =>
-            {
-                Console.WriteLine(message);
-            };
+            Messenger.OnMessageReceived = Console.WriteLine;
 
             var model = new AirConditioner();
 
@@ -27,7 +18,7 @@ namespace StateMachineSample.CUI
 
             var exit = false;
 
-            while(exit == false)
+            while (exit == false)
             {
                 stm.Update();
 
@@ -66,14 +57,11 @@ namespace StateMachineSample.CUI
                     case "exit":
                         exit = true;
                         break;
-                    default:
-                        break;
                 }
-
             }
         }
 
-        static void Print(AirConditioner model)
+        private static void Print(AirConditioner model)
         {
             Console.Write($"Target Temp : {model.TargetTemperature}[deg] | ");
             Console.Write($"Temp : {model.Temperature}[deg] | ");

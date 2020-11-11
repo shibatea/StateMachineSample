@@ -21,7 +21,7 @@ namespace StateMachineSample.Lib.StateMachines.Application.State
 
             var model = stm.Model;
 
-            var level = model.StainLevelAnalys();
+            var level = model.StainLevelAnalysis();
 
             switch (level)
             {

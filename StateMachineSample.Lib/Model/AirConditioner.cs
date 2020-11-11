@@ -59,13 +59,13 @@ namespace StateMachineSample.Lib.Model
 
         public StainLevel StainLevel { get; private set; }
 
-        private int AnalyseCount { get; set; }
+        private int AnalysisCount { get; set; }
 
         private int CleanCount { get; set; }
 
         private StainLevel PrevStainLevel { get; set; }
 
-        private bool AnalyseFinished => StainLevel != StainLevel.Unknown;
+        private bool AnalysisFinished => StainLevel != StainLevel.Unknown;
 
         private bool CleanFinished => StainLevel == StainLevel.High && CleanCount >= 20
                                       || StainLevel == StainLevel.Low && CleanCount >= 10;
@@ -82,7 +82,7 @@ namespace StateMachineSample.Lib.Model
 
             PrevStainLevel = StainLevel.Unknown;
 
-            AnalyseCount = 0;
+            AnalysisCount = 0;
 
             CleanCount = 0;
         }
@@ -100,7 +100,7 @@ namespace StateMachineSample.Lib.Model
 
             PrevStainLevel = StainLevel.Unknown;
 
-            AnalyseCount = 0;
+            AnalysisCount = 0;
 
             CleanCount = 0;
         }
@@ -130,11 +130,11 @@ namespace StateMachineSample.Lib.Model
             if (Humidity > MinHumidity) Humidity--;
         }
 
-        public StainLevel StainLevelAnalys()
+        public StainLevel StainLevelAnalysis()
         {
-            AnalyseCount++;
+            AnalysisCount++;
 
-            if (AnalyseCount >= 5)
+            if (AnalysisCount >= 5)
                 switch (PrevStainLevel)
                 {
                     case StainLevel.Unknown:
@@ -173,7 +173,7 @@ namespace StateMachineSample.Lib.Model
 
             StainLevel = StainLevel.Unknown;
 
-            AnalyseCount = 0;
+            AnalysisCount = 0;
 
             CleanCount = 0;
         }
